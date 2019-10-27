@@ -8,7 +8,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.robot.commands.ActivateShooter;
 import poroslib.triggers.SmartJoystick;
 
 /**
@@ -27,7 +26,7 @@ public class OI {
     this.driverJoy.setRotateAxis(4);
     this.bShoot = new JoystickButton(this.driverJoy, 1);
 
-    this.bShoot.whenActive(new ActivateShooter());
+    //this.bShoot.whenActive(new ActivateShooter());
   }
   //// CREATING BUTTONS
   // One type of button is a joystick button which is any button on a

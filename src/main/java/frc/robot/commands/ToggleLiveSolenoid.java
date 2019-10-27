@@ -7,14 +7,11 @@
 
 package frc.robot.commands;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class ActivateShooter extends Command {
-  public ActivateShooter() {
-    requires(Robot.shooter);
+public class ToggleLiveSolenoid extends Command {
+  public ToggleLiveSolenoid() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -22,24 +19,23 @@ public class ActivateShooter extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    Robot.reloader.toggleLiveSolenoid();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.shooter.set(ControlMode.PercentOutput ,0.3);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return true;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.shooter.set(ControlMode.PercentOutput ,0);
   }
 
   // Called when another command which requires one or more of the same

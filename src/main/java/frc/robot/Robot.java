@@ -7,14 +7,19 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Reloader;
 import frc.robot.subsystems.Shooter;
+import poroslib.subsystems.MechSys;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,7 +32,10 @@ public class Robot extends TimedRobot {
 
   public static DriveTrain driveTrain;
   public static OI oi;
-  public static Shooter shooter;
+  public static MechSys shooter;
+  public static Reloader reloader;
+
+
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -35,9 +43,10 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    this.driveTrain = new DriveTrain();
-    this.shooter = new Shooter();
-    this.oi = new OI();
+    Robot.driveTrain = new DriveTrain();
+    Robot.shooter = new MechSys(new Victor(RobotMap.kShooterPort));
+    Robot.reloader = new Reloader();
+    Robot.oi = new OI();
     
   }
 

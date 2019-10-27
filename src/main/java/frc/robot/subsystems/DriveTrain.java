@@ -17,8 +17,11 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.Victor;
 import frc.robot.OI;
 import frc.robot.RobotMap;
+import poroslib.commands.ArcadeDrive;
 import poroslib.commands.CurvatureDrive;
 import poroslib.subsystems.DiffDrivetrain;
 /**
@@ -27,64 +30,50 @@ import poroslib.subsystems.DiffDrivetrain;
 public class DriveTrain extends DiffDrivetrain {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  private WPI_TalonSRX masterLeft;
-  private WPI_TalonSRX masterRight;
-  private WPI_TalonSRX middleLeft;
-  private WPI_TalonSRX middleRight;
-  private WPI_VictorSPX rearLeft;
-  private WPI_VictorSPX rearRight;
+  /*private Victor masterLeft;
+  private Victor masterRight;
+  private Victor rearLeft;
+  private Victor rearRight;*/
+
+  private SpeedControllerGroup masterLeft;
+  private SpeedControllerGroup masterRight;
 
   private NeutralMode neutralMode = NeutralMode.Brake;
 
   public DriveTrain()
   {
-    super(new WPI_TalonSRX(RobotMap.kFrontLeftPort), new WPI_TalonSRX(RobotMap.kFrontRightPort), false);
+    super(new SpeedControllerGroup(new Victor(RobotMap.kFrontLeftPort), new Victor(RobotMap.kRearLeftPort)), new SpeedControllerGroup(new Victor(RobotMap.kFrontRightPort), new Victor(RobotMap.kRearRightPort)));
 
-    masterLeft = (WPI_TalonSRX)leftController;
-    masterRight = (WPI_TalonSRX)rightController;
-    middleLeft = new WPI_TalonSRX(RobotMap.kMiddleLeftPort);
-    middleRight = new WPI_TalonSRX(RobotMap.kMiddleRightPort);
-    rearLeft = new WPI_VictorSPX(RobotMap.kRearLeftPort);
-    rearRight = new WPI_VictorSPX(RobotMap.kRearRightPort);
+    masterLeft = (SpeedControllerGroup)leftController;
+    masterRight = (SpeedControllerGroup)rightController;
+    /*rearLeft = new Victor(RobotMap.kRearLeftPort);
+    rearRight = new Victor(RobotMap.kRearRightPort);
 
-    middleLeft.follow(masterLeft);
     rearLeft.follow(masterLeft);
-    middleRight.follow(masterRight);
     rearRight.follow(masterRight);
 
-    masterLeft.setInverted(InvertType.None);
-    masterRight.setInverted(InvertType.None);
-    middleLeft.setInverted(InvertType.FollowMaster);
-    middleRight.setInverted(InvertType.FollowMaster);
-    rearLeft.setInverted(InvertType.FollowMaster);
-    rearRight.setInverted(InvertType.FollowMaster);
+    
+    rearLeft.setInverted(false);
+    rearRight.setInverted(false);*/
+    
+    masterLeft.setInverted(false);
+    masterRight.setInverted(false);
 
-    setNeutralMode(neutralMode);
 
-    masterRight.set(ControlMode.PercentOutput, 0);
-    masterLeft.set(ControlMode.PercentOutput, 0);
+    masterRight.set(0);
+    masterLeft.set(0);
 
     this.setRotateDeadband(0.2);
 
-    this.masterLeft.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    /*this.masterLeft.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
     this.masterRight.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
     this.masterLeft.setSensorPhase(true);
-    this.masterRight.setSensorPhase(true);
-  }
-
-  public void setNeutralMode(NeutralMode neutralMode)
-  {
-    this.masterLeft.setNeutralMode(neutralMode);
-    this.masterRight.setNeutralMode(neutralMode);
-    this.middleLeft.setNeutralMode(neutralMode);
-    this.middleRight.setNeutralMode(neutralMode);
-    this.rearLeft.setNeutralMode(neutralMode);
-    this.rearRight.setNeutralMode(neutralMode);
+    this.masterRight.setSensorPhase(true);*/
   }
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new CurvatureDrive(this, OI.driverJoy, 0.6, 1.0, 0.3));
+    setDefaultCommand(new ArcadeDrive(this, OI.driverJoy));
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
   }
